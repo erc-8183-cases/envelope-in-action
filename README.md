@@ -17,10 +17,7 @@ Each case follows a four-section format defined in [FORMAT.md](./FORMAT.md):
 
 - **Case 1** — [Agent-to-MCP-server invocation](./cases/01-mcp-invocation.md) (RNWY × ThoughtProof)
 - **Case 2** — [Wallet-bound aggregation at pre-transaction trust](./cases/02-wallet-bound-aggregation.md) (SkyeMeta)
-
-### Forthcoming
-
-- **Case 3** — Pre-commit composition at transaction-composition time (InsumerAPI × ThoughtProof)
+- **Case 3** — [Pre-commit composition at transaction-composition time](./cases/03-pre-commit.md) (InsumerAPI × ThoughtProof)
 
 ## What this repository is, and is not
 
