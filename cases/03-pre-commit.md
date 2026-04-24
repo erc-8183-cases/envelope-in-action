@@ -1,9 +1,9 @@
 # The Envelope in Action: Pre-Commit Composition at Transaction-Composition Time
 
-_Draft v5 -- April 2026_
+_Draft v1 — April 2026_
 _Third case (second action-time), contributed by: InsumerAPI, ThoughtProof_
 
-_Contributed under the case format proposed in "The Envelope in Action" (April 2026, format v5.2). Open to feedback from all Envelope issuers._
+_Contributed under the case format proposed in "The Envelope in Action" (ThoughtProof, April 2026). Open to feedback from all Envelope issuers._
 
 ## Why this case exists
 
