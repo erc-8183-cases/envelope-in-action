@@ -19,6 +19,10 @@ Each case follows a four-section format defined in [FORMAT.md](./FORMAT.md):
 - **Case 2** — [Wallet-bound aggregation at pre-transaction trust](./cases/02-wallet-bound-aggregation.md) (SkyeMeta)
 - **Case 3** — [Pre-commit composition at transaction-composition time](./cases/03-pre-commit.md) (InsumerAPI × ThoughtProof)
 
+### Forthcoming
+
+- **Case 4** — [Co-evaluator composition in an ERC-8183 job lifecycle](./cases/04-ahm-thoughtproof-cycle4.md) (AHM × ThoughtProof)
+
 ## What this repository is, and is not
 
 **Is:** a library of contributed composition cases and format-fit notes for ERC-8183's Multi-Attestation Envelope.
