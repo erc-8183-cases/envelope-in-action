@@ -12,7 +12,11 @@ The clean cycle-4 joint job is meant to show a different Envelope surface than t
 At this surface, AHM and ThoughtProof are not duplicate judges. They answer different questions:
 
 - **AHM evaluates the agent / behavioral / operational layer.** The relevant question is whether the participating agent looks healthy enough to trust in the job context: observed history, behavioral signals, operational posture, and confidence boundaries around sparse evidence.
-- **ThoughtProof evaluates the reasoning / process layer.** The relevant question is whether the job deliverable, rationale, or trace is defensible: whether the reasoning preserves uncertainty, avoids overclaiming, and supports the action taken in the job lifecycle.
+- **ThoughtProof evaluates the reasoning / process layer.** ThoughtProof operates two distinct verification products that compose into a single evaluator position:
+  - **PoT/RV (Proof of Thought / Reasoning Verification):** A binary faithfulness check against a submitted claim, rationale, and evidence record. The question is whether the reasoning preserves uncertainty, avoids overclaiming, and supports the action taken — without requiring a structured trace or plan decomposition. This is the floor: every evaluator call produces at minimum a defensible reasoning verdict.
+  - **PLV (Plan-Level Verification):** A structured reproducibility layer that decomposes the agent's task into gold plan steps with criticality weightings, evaluates per-step trace evidence, enforces source-verification rules, and produces tiered confidence bands. PLV adds auditability and replayability on top of reasoning verification for cases that require stronger evidence trails.
+
+  In the context of an ERC-8183 job, ThoughtProof's evaluator middleware routes to PoT/RV or PLV based on the available evidence surface: if the job provides only a claim and rationale, PoT/RV produces the verdict; if the job provides a structured trace with tool calls and plan steps, PLV produces a richer assessment with per-step accountability. Both collapse into the same binary settlement action (complete/reject).
 
 The ERC-8183 settlement layer remains intentionally binary. A job is completed or rejected. The Envelope case is not trying to turn ERC-8183 settlement into a multi-score dispute engine. Instead, it demonstrates how richer evaluator evidence can sit around that binary settlement path without overloading the protocol primitive.
 
@@ -25,7 +29,7 @@ The composition point is therefore:
 3. **No evaluator speaks for the other.** AHM's result does not become ThoughtProof's result; ThoughtProof's verdict does not become AHM's health score. Each issuer preserves its own vocabulary and confidence semantics.
 4. **The consumer composes the evidence.** The job manager or relying party can treat either evaluator as a gate, require both, or use one as an escalation trigger. The Envelope makes those independent attestations legible without forcing a single blended score.
 
-A monolithic evaluator score would blur exactly the information the job lifecycle needs. If AHM returns an insufficient-confidence behavioral assessment and ThoughtProof returns a reasoning-faithfulness allow, an average score hides the operational reality: the reasoning may be sound while the agent's sparse history still warrants caution. Conversely, if AHM sees a healthy agent but ThoughtProof sees unsupported reasoning, the behavioral score should not wash out the reasoning failure. Composition preserves the distinction.
+A monolithic evaluator score would blur exactly the information the job lifecycle needs. If AHM returns an insufficient-confidence behavioral assessment and ThoughtProof returns a reasoning-verification allow (whether via PoT/RV binary check or PLV plan-step analysis), an average score hides the operational reality: the reasoning may be sound while the agent's sparse history still warrants caution. Conversely, if AHM sees a healthy agent but ThoughtProof sees unsupported reasoning, the behavioral score should not wash out the reasoning failure. Composition preserves the distinction.
 
 ## Section 5 — What this demonstrates about the Envelope as a primitive
 
@@ -37,7 +41,7 @@ A clean cycle-4 co-produced artefact should demonstrate five invariants.
 
 ### 1. Evaluators can compose around one job without sharing an internal model
 
-AHM does not need to adopt ThoughtProof's reasoning-verification schema. ThoughtProof does not need to adopt AHM's behavioral scoring model. Each evaluator signs or records evidence in its own native form. The shared object is the job lifecycle and the artefact boundary, not a shared scoring ontology.
+AHM does not need to adopt ThoughtProof's verification schemas (neither the PoT/RV verdict vocabulary nor the PLV plan-step decomposition). ThoughtProof does not need to adopt AHM's behavioral scoring model. Each evaluator signs or records evidence in its own native form. The shared object is the job lifecycle and the artefact boundary, not a shared scoring ontology.
 
 ### 2. Binary settlement does not preclude multi-dimensional evidence
 
@@ -68,8 +72,10 @@ A reproducibility layer can be added for stronger auditability cases: permanent 
 
 The taxonomy for Section 7 should therefore be:
 
-- **Reasoning verification as the floor.** Every evaluator should be able to explain why its lifecycle action follows from its evidence.
-- **Reproducibility as an optional auditability layer.** Some jobs require stronger artefact permanence or replayability; others only need a defensible signed verdict and confidence boundary.
+- **PoT/RV (Reasoning Verification) as the floor.** Every evaluator should be able to explain why its lifecycle action follows from its evidence. In ThoughtProof's implementation, this is Proof of Thought: a binary faithfulness check (ALLOW / UNCERTAIN / BLOCK) against a claim, rationale, and evidence record. It requires no structured trace decomposition and produces a defensible verdict at minimal cost and latency.
+- **PLV (Plan-Level Verification) as the reproducibility / auditability layer.** Some jobs require stronger evidence trails: per-step trace accountability, source-verification rules, criticality-weighted plan decomposition, and tiered confidence bands. PLV adds this structured layer on top of reasoning verification. It is rerunnable, inspectable, and produces artefacts that a third party can replay. But it requires richer input (a structured trace with tool calls and plan steps) and is not required for every ERC-8183 job.
+
+The composition point: PoT/RV and PLV are not competing approaches. They are layers in the same evaluator stack. A job with minimal evidence gets a defensible reasoning verdict (PoT/RV). A job with a rich structured trace gets full plan-level accountability (PLV). Both produce a binary settlement action.
 
 ### 5. The Envelope case can document composition without changing ERC-8183
 
