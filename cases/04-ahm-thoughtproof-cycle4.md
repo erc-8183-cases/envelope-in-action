@@ -1,9 +1,9 @@
 # The Envelope in Action: Co-Evaluator Composition in an ERC-8183 Job Lifecycle
 
-_Draft v0.1 — May 2026_
+_Draft v0.2 — May 2026_
 _Fourth case, contributed by: AHM, ThoughtProof_
 
-_Contributed under the case format proposed in "The Envelope in Action". This draft is intentionally scoped to Sections 4 and 5 of the planned joint write-up; Sections 1, 2, 3, 6, and 7 will be built around the clean cycle-4 joint job once the assignment lands._
+_Contributed under the case format proposed in "The Envelope in Action". v0.2 adds Section 3 (the clean cycle-4 joint artefact from ASP Job #4), completing the core evidentiary record. Sections 1, 2, 6, and 7 remain forthcoming._
 
 ## Section 4 — Why this is composition, not redundancy
 
@@ -83,16 +83,63 @@ The clean joint job should not require a protocol amendment. It should show that
 
 The case-library contribution should therefore avoid claiming that ERC-8183 needs new semantics for confidence or multi-score aggregation. The better conclusion is narrower and stronger: the existing binary lifecycle can carry richer evaluator evidence around it, and the Envelope makes that evidence independently interpretable.
 
-## Section 3 placeholder — clean cycle-4 artefact
+## Section 3 — The clean cycle-4 artefact: ASP Job #4
 
-_To be filled after the new joint job lands._
+### Job setup
 
-Preferred shape:
+| Field | Value |
+|-------|-------|
+| Contract | AgentJobManager `0xC07CE789206CBEEC3A41D5CedBdA93B1024aaDdd` |
+| Chain | Base Sepolia (84532) |
+| Job ID | 4 |
+| Creator | Bakugo32 / Demsys (deployer wallet) |
+| Provider | AHM — `0x35eeDdcbE5E1AE01396Cb93Fc8606cE4C713d7BC` |
+| Evaluator | ThoughtProof — `0x118B1E5A47658D20046bC874cB34E469d472c0C2` |
 
-1. A new ERC-8183 job is created on the current contracts.
-2. AHM and ThoughtProof agree on paired test deliverables or a naturally fitting Bakugo32 test job.
-3. AHM evaluates the agent / behavioral / operational layer.
-4. ThoughtProof evaluates the reasoning / process layer.
-5. The case records both outputs and shows how they informed the binary job lifecycle without collapsing the two evidence surfaces.
+### Provider deliverable (AHM)
 
-If Bakugo32's next test job naturally fits this structure, it can become the Section 3 artefact. Otherwise, the cleaner path is bespoke paired test deliverables that AHM and ThoughtProof evaluate for each other.
+AHM submitted an Agent Health Score attestation for ACP #2624 ("Jeff CEO"), wallet `0x92ebf2f83e9981f2ee08187794e12dabfde953e9`.
+
+**Submit TX:** `0x392ef97c1d9bed0318cf512f9300d710752dfb2b041ef4c641cda872200a4331`
+
+**Deliverable content:** [ahm-job4-deliverable.json](https://gist.githubusercontent.com/moonshot-cyber/7418ac58eb26eaf2fdca932462ea3c88/raw/57a25319c7360fd953fde3e8aa15daefe24dd51c/ahm-job4-deliverable.json)
+
+Summary of AHM's assessment:
+
+- **AHS:** 57 / Grade D / HIGH confidence
+- **Dimensions:** D1 (transaction-pattern) = 70, D2 (behavioural-diversity) = 51, D3 (infrastructure) = null (2D mode)
+- **Observation window:** 9 scans across 49 days, 146 transactions
+- **Temporal pattern:** 8 of 9 observations at 57/D, one transient C-grade spike (64/C) on 2026-04-15 driven by a D2 dimensional burst that subsequently reverted
+- **Reasoning chain included:** claim, behavioural signals, confidence basis, grade justification
+
+The deliverable contains AHM's full reasoning chain — not just a score, but the evidentiary path from wallet signals to composite grade to confidence assignment. This is the substrate that PoT/RV evaluates.
+
+### Evaluator verification (ThoughtProof — PoT/RV)
+
+ThoughtProof evaluated via **PoT/RV (Proof of Thought / Reasoning Verification)** — the binary faithfulness check product. PLV was not applicable: AHM's deliverable provides claim + rationale + evidence, not a structured agent trace with tool calls and plan steps. PoT/RV is the correct product for this evidence surface.
+
+**Pipeline:** 4 generator perspectives (Technical, Epistemology, Contrarian, Statistical) → adversarial red-team → synthesis by orchestrator.
+
+**Key verification findings:**
+
+1. **Arithmetic:** Weight renormalization (D3 excluded, D1+D2 renormalized to sum 1.0) produces 0.375×70 + 0.625×51 = 58.125. EMA temporal smoothing (α=0.6) across the observation sequence converges to 57. The arithmetic is defensible.
+2. **Scope:** AHM claims wallet health, not agent reasoning quality. No overclaim beyond stated methodology.
+3. **Evidence chain:** Complete — claim → dimensional scores → behavioural signals → confidence basis → grade justification. Each step follows from the prior.
+4. **Surviving dissent:** HIGH confidence at n=9 observations is aggressive by general epistemological standards. The red-team assessed this as a calibration question internal to AHM's published methodology, not a defect in the reasoning chain.
+
+**Verdict:** ALLOW (confidence 0.72)
+
+**Settlement TX:** `0x4ab25466f2e790bd134ca68dd5c1a483b3e81171ed6066e9f45f3f50983a4c88` (block 41529925)
+
+**Settlement action:** `complete(4, 0xa998c81e150e02d9eb94a62109a73b6be8a9ad67eb3b31d195e702fdedd93716)`
+
+**Full epistemic block:** [ar://-c1iufNZVyZyTOOr4RVl0gnfSUQ52UmUYfzpIMoCFnY](https://arweave.net/-c1iufNZVyZyTOOr4RVl0gnfSUQ52UmUYfzpIMoCFnY) — permanently archived, hash-linked on-chain as the reason parameter.
+
+### What the joint artefact shows
+
+The binary settlement (`complete()`) is the protocol-layer outcome. But the evidentiary record around that binary includes:
+
+- **AHM side:** a full scoring attestation with dimensional breakdown, temporal pattern analysis, confidence calibration, and methodology reference — all in a self-contained JSON deliverable.
+- **ThoughtProof side:** a multi-perspective epistemic verification block with generator proposals, adversarial critique, mathematical validation, and synthesized verdict — permanently archived and hash-linked to the settlement transaction.
+
+Neither evaluator adopted the other's vocabulary. AHM speaks in AHS grades and dimensional scores. ThoughtProof speaks in ALLOW/UNCERTAIN/BLOCK verdicts and epistemic confidence. The protocol composed them through the binary lifecycle without requiring a shared scoring ontology.
