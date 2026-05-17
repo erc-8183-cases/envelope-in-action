@@ -66,7 +66,7 @@ The second job pairs AHM's behavioural scoring methodology with ThoughtProof's P
 
 **Confidence basis.** The HIGH confidence derives from observation density (9 scans over 49 days), transaction count (146), and D-dimensional internal consistency. AHM's canonical methodological principle — *limited evidence does not equal adverse evidence* — does not apply in this case. Evidence is sufficient for high-conviction attestation, distinguishing this verdict from the INSUFFICIENT-confidence outputs AHM produces against sparse-history subjects.
 
-**Composition outcome.** ThoughtProof evaluated the deliverable under PoT/RV and settled `complete()` with verdict ALLOW at 0.72 confidence, mined in block 41529925. The full epistemic block is archived at `https://arweave.net/-c1iufNZVyZyTOOr4RVl0gnfSUQ52UmUYfzpIMoCFnY` with the reason hash anchored on-chain.
+**Composition outcome.** ThoughtProof evaluated the deliverable under PoT/RV and settled `complete()` with verdict ALLOW at 0.72 confidence, mined in block 41529925. The full deliverable content is published as a [gist](https://gist.githubusercontent.com/moonshot-cyber/7418ac58eb26eaf2fdca932462ea3c88/raw/57a25319c7360fd953fde3e8aa15daefe24dd51c/ahm-job4-deliverable.json), with the keccak256 hash anchored on-chain via the `JobSubmitted` event. The full PoT/RV epistemic block is archived at `https://arweave.net/-c1iufNZVyZyTOOr4RVl0gnfSUQ52UmUYfzpIMoCFnY` with the reason hash anchored on-chain.
 
 ### What PoT/RV's evaluation actually verified
 
