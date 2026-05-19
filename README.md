@@ -18,6 +18,7 @@ Each case follows a four-section format defined in [FORMAT.md](./FORMAT.md):
 - **Case 1** — [Agent-to-MCP-server invocation](./cases/01-mcp-invocation.md) (RNWY × ThoughtProof)
 - **Case 2** — [Wallet-bound aggregation at pre-transaction trust](./cases/02-wallet-bound-aggregation.md) (SkyeMeta)
 - **Case 3** — [Pre-commit composition at transaction-composition time](./cases/03-pre-commit.md) (InsumerAPI × ThoughtProof)
+- **Case 4** — [Co-evaluator composition in an ERC-8183 job lifecycle](./cases/04-ahm-thoughtproof-cycle4.md) (AHM × ThoughtProof)
 
 ## What this repository is, and is not
 
