@@ -1,6 +1,6 @@
 # The Envelope in Action: A Format for Lived Composition Cases
 
-_Draft v5.3 -- April 2026_
+_Draft v5.4 -- June 2026_
 _Format proposed by: ThoughtProof. Reframed in v5 following feedback from RNWY (case 1) and SkyeMeta (case 2)._
 
 _This is a proposed format for supplementary case documentation, not a spec amendment. Open to feedback from all Envelope issuers._
@@ -66,8 +66,9 @@ Regardless of which dimensions, which topology, or which surface a case involves
 | 1 | Agent-to-MCP-server invocation   | Action-time gating          | Server quality & risk x Reasoning        | RNWY, ThoughtProof                    |
 | 2 | Pre-transaction trust            | Wallet-bound aggregation    | All ten signed dimensions                | SkyeMeta                              |
 | 3 | Transaction-composition time     | Action-time gating          | Pre-commit wallet-state x Reasoning      | _(published; InsumerAPI, ThoughtProof)_ |
+| 4 | Settlement-time co-evaluation    | Settlement-time gating      | Behavioural diagnostics x Reasoning      | _(published; AHM, ThoughtProof)_        |
 
-Three cases published, covering two topologies and two action-time surfaces, with the same format and the same invariants throughout.
+Four cases published, covering three topologies (action-time, wallet-bound, settlement-time) and three action-time surfaces, with the same format and the same invariants throughout.
 
 ## Cases in waiting
 
@@ -96,7 +97,7 @@ Short-hand labels used across cases ("reasoning integrity," "server-side quality
 
 Any issuer of an ERC-8183 Envelope dimension can contribute a case. Cases can be:
 
-- **Pair cases**: two dimensions meeting at one surface (case 1, case 3 published).
+- **Pair cases**: two dimensions meeting at one surface (cases 1, 3, 4 published).
 - **Topology cases**: a single implementer writing up how a topology works in production at their surface (case 2 published).
 - **Multi-dimension cases**: three or more dimensions at one surface.
 - **Format-fit notes**: if exercising the format on a new topology or surface surfaces reframes that extend the format cleanly, those are welcomed as format-fit notes within the case, and folded into the format document on the next publish.
@@ -105,6 +106,7 @@ The format is maintained as a living document. Reframes contributed through case
 
 ## Changelog
 
+- **v5.4 (June 2026)** -- Case 4 (settlement-time co-evaluation, AHM x ThoughtProof) published. Four-case library complete: cases 1 and 3 (action-time gating), case 2 (wallet-bound aggregation), case 4 (settlement-time gating). Third topology introduced.
 - **v5.3 (April 2026)** -- Case 3 (pre-commit transaction-composition, InsumerAPI x ThoughtProof) published. Three-case library complete: case 1 (action-time at MCP invocation), case 2 (wallet-bound aggregation at SkyeProfile), case 3 (action-time at transaction-composition).
 - **v5.2 (April 2026)** -- Case 3 (pre-commit transaction-composition, InsumerAPI x ThoughtProof) marked as forthcoming rather than published. The series launches with the first topology established by case 1 (action-time, MCP) and the second topology established by case 2 (wallet-bound aggregation, SkyeProfile); case 3 joins the library on publish as a library expansion. Sequencing note contributed by Douglas Borthwick.
 - **v5.1 (April 2026)** -- AVERI citation corrected to match arXiv:2601.11699 institutional naming; license (CC BY 4.0), suggested citation, and versioning scheme added; minor terminology consistency pass.
@@ -124,7 +126,7 @@ This document, together with published cases, is released under CC BY 4.0 -- con
 
 Suggested citation:
 
-> ThoughtProof, RNWY, and SkyeMeta (2026). _The Envelope in Action: A Format for Lived Composition Cases, v5.3_. Available at https://github.com/erc-8183-cases/envelope-in-action.
+> ThoughtProof, RNWY, SkyeMeta, and AHM (2026). _The Envelope in Action: A Format for Lived Composition Cases, v5.4_. Available at https://github.com/erc-8183-cases/envelope-in-action.
 
 Issuers interested in contributing a case, proposing a format-fit reframe, or flagging an inaccuracy can open a pull request or issue at https://github.com/erc-8183-cases/envelope-in-action, or reach the maintainers directly via the contact listed there.
 
@@ -132,6 +134,6 @@ Versioning: the format document uses semantic point releases (v5.1 -> v5.2 -> v6
 
 ## Acknowledgments
 
-The format proposed here was drafted by ThoughtProof, with substantive co-authoring from RNWY (case 1; review feedback that shaped v4), SkyeMeta (case 2; three format-fit reframes folded into v5), and InsumerAPI (case 3; pre-commit predicate and attestation specification).
+The format proposed here was drafted by ThoughtProof, with substantive co-authoring from RNWY (case 1; review feedback that shaped v4), SkyeMeta (case 2; three format-fit reframes folded into v5), InsumerAPI (case 3; pre-commit predicate and attestation specification), and AHM (case 4; behavioural-diagnostics co-evaluation at settlement time).
 
 The wallet-aggregation topology referenced throughout is implemented and documented in the `insumer-examples` repository, which includes working verification code against the participating issuers' JWKS endpoints. Published cases are maintained as separate documents alongside this format proposal.
