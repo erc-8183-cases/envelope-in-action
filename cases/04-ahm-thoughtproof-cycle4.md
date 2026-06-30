@@ -212,3 +212,102 @@ The settlement-time surface at ERC-8183 admits natural extensions, each inviting
 - **Asynchronous re-evaluation**: a composition where one evaluator's verdict triggers a downstream re-evaluation by another evaluator on the same subject, with the second attestation landing on-chain alongside the settlement record. Relevant to settings where deliverable freshness matters (e.g. behavioural scoring with a >24h cache TTL composed with reasoning verification of the cached output).
 
 Each is an invitation to whichever issuers cover the relevant dimensions.
+
+## Section 8 — Inner evaluator narratives
+
+_This section presents each evaluator's own account of their role in Cycle 4, written by the respective teams. §8.1 is authored by AHM; §8.2 is authored by ThoughtProof. §8.3 (composition rule application, on-chain settlement, and Arweave references) will be stitched jointly once both sides land._
+
+### 8.1 AHM-evaluator narrative
+
+AHM's role in Cycle 4 was to produce a structured behavioural attestation for the provider agent, consumable by ThoughtProof's downstream reasoning verification.
+
+**Subject.** ACP agent #2624 ("Jeff CEO"), wallet `0x92ebf2f83e9981f2ee08187794e12dabfde953e9` — a Base mainnet agent active across the ACP proactive scan and AHM's rescan sources, with 49 days of observed activity and 146 transactions at the time of attestation.
+
+**Scoring mode.** 2D mode (D1 + D2). D3 (Infrastructure Health) was excluded because no agent service endpoint was registered for synchronous probing, putting the scoring in 2D rather than 3D mode. This is a property of the subject (no probeable endpoint exposed), not of AHM's methodology — agents with registered service endpoints run in 3D mode by default.
+
+**Attestation produced.**
+
+| Field | Value |
+| --- | --- |
+| AHS composite | 57 |
+| Grade band | D |
+| Confidence | HIGH |
+| Mode | 2D (D1 + D2) |
+| Scan count | 10 cumulative |
+| Observation window | 49 days |
+| Transactions | 146 |
+
+**Arithmetic.** Direct 2D weighting: D1 × 0.30 + D2 × 0.70 = 0.30 × 70 + 0.70 × 51 = 56.7, rounded to 57. EMA temporal smoothing (α=0.6) across 9 of 10 cumulative scans showing AHS 57 (one transient observation at 64/C from an Apr 15 D2 spike) produced the final composite.
+
+**Confidence basis.** HIGH confidence derived from observation density (10 scans over 49 days), transaction count (146), and D-dimensional internal consistency. The "limited evidence ≠ adverse evidence" principle did not apply in this case — evidence sufficiency was met for high-conviction attestation, distinguishing this verdict from the INSUFFICIENT-confidence outputs AHM produces against sparse-history subjects.
+
+**Surviving methodology question.** The attestation explicitly preserved one open concern: HIGH confidence at this observation density (10 scans) is aggressive against general epistemological standards. AHM's confidence schema was originally calibrated against the high-volume scoring regime (hundreds of observations) and the threshold mapping has not been recalibrated for the mid-density regime (9–50 observations) this case sits in. The attestation surfaced this concern rather than suppressing it — the reasoning chain is internally consistent under the methodology as published, but the calibration question is real and remains a live AHM workstream.
+
+**Output structure surfaced to the consumer.** The attestation included the composite AHS, grade band, confidence enum, dimensional breakdown (D1=70, D2=51), the surviving methodology question, and the observation lineage (10 scans across 49 days, with the one transient deviation explicitly recorded). The dimensional decomposition is part of the deliverable, not collapsed into the headline score — consumers can act on dimensional signal directly rather than only on the composite.
+
+**Deliverable artefact.** Job #4 deliverable JSON — [gist (ahm-job4-deliverable.json)](https://gist.githubusercontent.com/moonshot-cyber/7418ac58eb26eaf2fdca932462ea3c88/raw/57a25319c7360fd953fde3e8aa15daefe24dd51c/ahm-job4-deliverable.json), keccak256 hash anchored on-chain via the `JobSubmitted` event.
+
+### 8.2 ThoughtProof-evaluator narrative
+
+ThoughtProof's role in Cycle 4 was to verify the reasoning chain behind AHM's behavioural attestation — not to re-score the agent, but to answer the question the scoring methodology itself cannot ask: *is the reasoning behind this attestation internally defensible?*
+
+**Subject.** The same ACP agent #2624 ("Jeff CEO") that AHM scored in §8.1, but consumed through a different evidence surface. ThoughtProof did not observe the agent's on-chain behaviour directly. The input was AHM's deliverable artefact: the scoring attestation with its dimensional breakdown, confidence enum, observation lineage, and methodology references. The question under verification was whether the reasoning chain from evidence to verdict is faithful — not whether the verdict is correct in some external sense.
+
+**Verification product.** PoT/RV (Proof of Thought / Reasoning Verification). PoT/RV is a binary faithfulness check against a submitted claim, rationale, and evidence record. It does not require a structured execution trace or plan decomposition (that is PLV's surface). The routing decision — PoT/RV rather than PLV — was evidence-driven: AHM's deliverable provided a claim, a scoring methodology, and an observation record, but not a structured agent execution trace with tool calls and plan steps. PoT/RV was the appropriate product surface for this input shape.
+
+**Pipeline.** Four generator perspectives — Technical/Engineering, Epistemology/Philosophy, Contrarian/Adversarial, and Data Science/Statistical — each produced an independent assessment of the deliverable's reasoning chain. These four perspectives were followed by adversarial red-teaming (generators critique each other's reasoning) and a synthesis stage that produces the final verdict.
+
+**Initial generator distribution.** 3 BLOCK, 1 UNCERTAIN. Under a naive majority rule, this would have been a hard rejection. The synthesis stage exists precisely for this case: generator-level verdicts are inputs to adjudication, not votes.
+
+**Red-team adjudication.** Two of the three BLOCKs were identified as resting on critical domain misunderstandings of the deliverable:
+
+- The Technical generator flagged a real inconsistency between the deliverable's assumed weights and AHM's actual 2D-mode weights. In 2D mode, AHM applies D1 × 0.30 + D2 × 0.70 directly — no renormalization. The generator assumed wrong weights, found an arithmetic gap, and resolved it by inventing a renormalization pathway that does not exist in AHM's methodology. Red-team identified the weight assumption as the generator's error, not AHM's arithmetic.
+
+- The Contrarian generator framed AHM as committing a "category error" by measuring agent quality through wallet-health signals. Red-team identified this as a misreading of the deliverable's explicit stated scope: the Jeff CEO attestation ran in 2D mode (D1 + D2), measuring wallet behavioural health specifically, not the agent's task-execution quality. The deliverable said so in plain text. AHM's broader product surface includes AHM Verify (a separate post-transaction output-verification service via a 6-role Claude adjudication pipeline), but that is a different product at a different lifecycle point — not a dimension that could be invoked for pre-transaction behavioural scoring.
+
+- The Data Science generator's BLOCK was the most analytically rigorous of the three. Its critique — that HIGH confidence at 10 observations is aggressive against general epistemological standards — survived red-team adjudication as a legitimate calibration concern rather than a reasoning defect. It became the surviving dissent in the synthesis.
+
+**Arithmetic verification.** The scoring chain was independently reproduced: D1 × 0.30 + D2 × 0.70 = 0.30 × 70 + 0.70 × 51 = 56.7, rounded to 57. EMA temporal smoothing (α=0.6) across 9 of 10 cumulative scans showing AHS 57, with one transient observation at 64/C from the Apr 15 D2 spike, confirms the final composite. The arithmetic is correct under the methodology as published.
+
+**Verdict.** ALLOW at 0.72 confidence (medium-high). The confidence reflects one surviving dissenting concern carried explicitly into the record: HIGH confidence at this observation density (10 scans over 49 days) is aggressive against general epistemological standards. This concern was not suppressed, not overridden, and not converted into a BLOCK — it was preserved as a live methodology question because the reasoning chain is internally consistent under AHM's published methodology, even if the calibration threshold deserves separate work.
+
+**Surviving methodology question.** Identical to the one AHM surfaced in §8.1 — both evaluators independently flagged the same concern from different directions. AHM flagged it as a property of their confidence schema calibration. ThoughtProof's Data Science generator flagged it as an epistemological observation about sample-size adequacy. The convergence is not coordinated; it is what independent evaluation of the same evidence surface produces when both sides are honest about uncertainty.
+
+**Output structure surfaced to the protocol.** The settlement action was `complete()`, mined in block 41529925. The binary protocol saw only a successful settlement. Above the protocol surface, the full PoT/RV epistemic block was archived at `https://arweave.net/-c1iufNZVyZyTOOr4RVl0gnfSUQ52UmUYfzpIMoCFnY` — containing the per-generator reasoning, the red-team adjudication, the synthesis with surviving dissent, the arithmetic verification, and the confidence derivation. The reason hash is anchored on-chain via the settlement transaction.
+
+**Deliverable artefact.** Job #4 settlement TX: `0x4ab25466f2e790bd134ca68dd5c1a483b3e81171ed6066e9f45f3f50983a4c88`. PoT/RV epistemic block: [Arweave](https://arweave.net/-c1iufNZVyZyTOOr4RVl0gnfSUQ52UmUYfzpIMoCFnY). Deliverable content: [gist](https://gist.githubusercontent.com/moonshot-cyber/7418ac58eb26eaf2fdca932462ea3c88/raw/57a25319c7360fd953fde3e8aa15daefe24dd51c/ahm-job4-deliverable.json), keccak256 hash anchored on-chain via `JobSubmitted`.
+
+### 8.3 Composition rule application, on-chain settlement, and archival references
+
+This section stitches the two evaluator narratives into a single composed-evaluation artefact. It does three things: states how the two attestations feed a settlement-time composition decision, consolidates the on-chain settlement record into one verifiable reference table, and closes on the uncoordinated convergence the pair produced.
+
+**Composition rule application.** The two attestations cover disjoint evidentiary surfaces over the same subject (ACP agent #2624, "Jeff CEO"). AHM's attestation answers a behavioural question — *does the agent's observed on-chain history support trust at this confidence?* (AHS 57 / Grade D / HIGH, 2D mode). ThoughtProof's attestation answers a reasoning question — *is the chain from evidence to that verdict internally defensible?* (PoT/RV ALLOW @ 0.72). Neither verdict is an input to the other: AHM did not consult ThoughtProof's pipeline, and ThoughtProof did not re-score the agent. The composition rule is therefore not a blend and not an override — it is a domain-separated gate that the consumer assembles at settlement time:
+
+- Each evaluator holds veto authority **only within its own domain**. A behavioural REJECT from AHM (e.g. INSUFFICIENT confidence against a sparse-history subject) gates the settlement on behavioural grounds; a reasoning BLOCK from ThoughtProof gates it on faithfulness grounds. This is a *mutual in-domain veto*, not a no-veto arrangement: each side can independently gate the composed decision within its own surface, and neither can overturn the other's in-domain finding — because the two are not measuring the same thing. The asymmetry that would be a problem (one side's verdict silently dominating the other's domain) does not arise, precisely because the domains are disjoint.
+- The consumer chooses the policy: treat either attestation as a hard gate, require both to clear (the conservative composition — used here), or use one as an escalation trigger for the other. The protocol surface is unaffected by the choice; both jobs settled binary regardless.
+- **The composition rule is defined for every combination of the two verdicts** (fully specified in the COMPOSED_EVALUATORS.md middleware writeup; summarised here). A reasoning ALLOW settles unless AHM reports *HIGH-confidence* adverse behaviour (Grade D–F at HIGH), in which case AHM's in-domain veto gates the settlement. A reasoning BLOCK always gates, regardless of behavioural standing. Crucially, a LOW- or INSUFFICIENT-confidence behavioural grade is *not* adverse evidence — under the limited-evidence-≠-adverse-evidence principle it settles (flagged for audit), it does not gate. The conflict cells are the point of composition: a blended score would let a healthy behavioural signal wash out a reasoning failure, or let a sparse history block a sound output. Domain-separated gating keeps each concern legible and actionable rather than averaged.
+- **Degradation is fail-closed on absence, not on low confidence.** If an evaluator is unavailable, times out, or returns malformed data, the composed decision does not fall through to the surviving verdict — a missing reasoning verdict is not a faithfulness pass, and a missing behavioural attestation is not a behavioural pass. This is distinct from a present-but-low-confidence behavioural grade, which settles with an audit flag rather than gating. Absence fails closed; low confidence does not. This preserves the Section 5 invariant that insufficient evidence remains first-class — neither silently converted into a pass nor into a rejection.
+
+A note on what the worked pair does and does not exercise. Job #4 and Job #5 demonstrate the composition *mechanics* — two independent evaluators settling a single job lifecycle with binary verdicts, no inter-issuer coordination, clean fee distribution — not an application of the composition *rule* above. In Job #4, ThoughtProof's role was to verify whether AHM's behavioural attestation was internally defensible (the deliverable under evaluation was AHM's reasoning), not to gate a settlement on Jeff CEO. AHM's Grade D / HIGH here is the *content* of the deliverable being verified, not a behavioural veto input feeding the composition rule. The PoT/RV ALLOW @ 0.72 therefore says "AHM's attestation reasoning is defensible," and the job settled `complete` on that basis. A live deployment applying the full composition rule (where AHM's grade is a veto input and ThoughtProof's verdict gates the same settlement) is the natural next case; this pair establishes that both evaluators can occupy either role and settle cleanly, which is the precondition for it.
+
+**On-chain settlement summary.** Both jobs ran on the same AgentJobManager deployment lineage (Base Sepolia: cycle-4 contract `0xC07CE789206CBEEC3A41D5CedBdA93B1024aaDdd`, redeployed `0x27E64c0180b1c9D860561C423479492f25ff7bE3` on 2026-05-19). The composition is fully reconstructable from the following on-chain and archival references:
+
+| Reference | Job #4 (ThoughtProof evaluates AHM) | Job #5 (AHM evaluates ThoughtProof) |
+| --- | --- | --- |
+| Provider | AHM | ThoughtProof |
+| Evaluator | ThoughtProof | AHM |
+| Subject | ACP agent #2624 ("Jeff CEO"), `0x92ebf2f83e9981f2ee08187794e12dabfde953e9` | Composition claim, PoT/RV 4-model consensus |
+| Deliverable hash | `0xf2bc97765af44471854c742d767d4f9c9a5b80a806f6a914e1c5512396214f9b` | `0xf2fae3a46c7e82bfb1f0a7b867d542b338ae21ed588ccdb6a0de79bd59e6328d` |
+| Submit TX | `0x392ef97c1d9bed0318cf512f9300d710752dfb2b041ef4c641cda872200a4331` | `0xbf3e4641f5657838b6655efb9a210db7633d6a0777f92d3394c2e1f7648e0846` |
+| Settlement TX | `0x4ab25466f2e790bd134ca68dd5c1a483b3e81171ed6066e9f45f3f50983a4c88` | `0x4efd2ecf83d26fc818d19234900ff7cf996b807cbed5f64e87a35ceac96421c8` |
+| Verdict | ALLOW @ 0.72 (block 41529925) | `complete` (4.975 USDC payout, 80/20 fee split) |
+| PoT/RV epistemic block | [arweave.net/-c1iufNZVyZyTOOr4RVl0gnfSUQ52UmUYfzpIMoCFnY](https://arweave.net/-c1iufNZVyZyTOOr4RVl0gnfSUQ52UmUYfzpIMoCFnY) | [arweave.net/MeKIu1SUBtjIYD7gCbVvjw1NLmRPIB2nBVedG8f5j_Q](https://arweave.net/MeKIu1SUBtjIYD7gCbVvjw1NLmRPIB2nBVedG8f5j_Q) |
+| Deliverable content | [gist (ahm-job4-deliverable.json)](https://gist.githubusercontent.com/moonshot-cyber/7418ac58eb26eaf2fdca932462ea3c88/raw/57a25319c7360fd953fde3e8aa15daefe24dd51c/ahm-job4-deliverable.json) | [arweave (PoT/RV epistemic block)](https://arweave.net/MeKIu1SUBtjIYD7gCbVvjw1NLmRPIB2nBVedG8f5j_Q) |
+
+Every cell above is verifiable from public data: the TX hashes resolve on Base Sepolia, the deliverable hashes are anchored on-chain via the `JobSubmitted` events, and the Arweave references are permanent. No trust in either evaluator is required to reconstruct what was attested and how it settled.
+
+The two verdict cells are intentionally asymmetric. Job #4 carries a PoT/RV confidence (ALLOW @ 0.72) because ThoughtProof ran a substantive reasoning verification against AHM's behavioural deliverable. Job #5 records only the binary `complete` because AHM's role there was procedural attestation of ThoughtProof's PoT/RV artefact as provider-fulfilment — it exercised the attestation path (read, validate, attest) without invoking AHM's cross-registry behavioural scoring, since the deliverable was a verification artefact about a claim, not an agent or wallet subject. The asymmetry reflects the deliberate subject asymmetry of the pair (Section 3), not a missing measurement.
+
+**Uncoordinated convergence.** The pair's most significant outcome is not that both jobs settled cleanly — that demonstrates the mechanics. It is that the two evaluators, operating independently and without coordination, surfaced *the same methodology question from two different directions*. AHM flagged it from the inside (§8.1): HIGH confidence at 10 observations is aggressive against a confidence schema originally calibrated for the high-volume regime, and the mid-density threshold mapping has not yet been recalibrated. ThoughtProof's Data Science generator flagged it from the outside (§8.2): HIGH confidence at this observation density is aggressive against general epistemological standards — a critique that survived red-team adjudication as a legitimate calibration concern and became the surviving dissent carried into the ALLOW verdict at 0.72.
+
+Neither side knew the other would raise it. AHM reached it through self-audit of its own calibration lineage; ThoughtProof reached it through adversarial reasoning verification of the deliverable. That two independent evaluators, with disjoint methodologies and no shared model, converged on the same open question is exactly what composed evaluation is supposed to produce: not redundant agreement on the headline verdict, but complementary illumination of where the real uncertainty lives. A monolithic blended score would have averaged this signal away. The Envelope preserves it as a live, jointly-surfaced methodology question — and that question, raised twice from two angles, carries more weight than either evaluator raising it alone.
