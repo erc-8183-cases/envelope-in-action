@@ -245,7 +245,7 @@ AHM's role in Cycle 4 was to produce a structured behavioural attestation for th
 
 **Output structure surfaced to the consumer.** The attestation included the composite AHS, grade band, confidence enum, dimensional breakdown (D1=70, D2=51), the surviving methodology question, and the observation lineage (10 scans across 49 days, with the one transient deviation explicitly recorded). The dimensional decomposition is part of the deliverable, not collapsed into the headline score — consumers can act on dimensional signal directly rather than only on the composite.
 
-**Deliverable artefact.** Job #4 deliverable JSON — keccak256 hash anchored on-chain via the `JobSubmitted` event. [Gist URL to be added when stitching §8.3.]
+**Deliverable artefact.** Job #4 deliverable JSON — [gist (ahm-job4-deliverable.json)](https://gist.githubusercontent.com/moonshot-cyber/7418ac58eb26eaf2fdca932462ea3c88/raw/57a25319c7360fd953fde3e8aa15daefe24dd51c/ahm-job4-deliverable.json), keccak256 hash anchored on-chain via the `JobSubmitted` event.
 
 ### 8.2 ThoughtProof-evaluator narrative
 
@@ -302,7 +302,7 @@ A note on what the worked pair does and does not exercise. Job #4 and Job #5 dem
 | Settlement TX | `0x4ab25466f2e790bd134ca68dd5c1a483b3e81171ed6066e9f45f3f50983a4c88` | `0x4efd2ecf83d26fc818d19234900ff7cf996b807cbed5f64e87a35ceac96421c8` |
 | Verdict | ALLOW @ 0.72 (block 41529925) | `complete` (4.975 USDC payout, 80/20 fee split) |
 | PoT/RV epistemic block | [arweave.net/-c1iufNZVyZyTOOr4RVl0gnfSUQ52UmUYfzpIMoCFnY](https://arweave.net/-c1iufNZVyZyTOOr4RVl0gnfSUQ52UmUYfzpIMoCFnY) | [arweave.net/MeKIu1SUBtjIYD7gCbVvjw1NLmRPIB2nBVedG8f5j_Q](https://arweave.net/MeKIu1SUBtjIYD7gCbVvjw1NLmRPIB2nBVedG8f5j_Q) |
-| Deliverable content | [gist (ahm-job4-deliverable.json)](https://gist.githubusercontent.com/moonshot-cyber/7418ac58eb26eaf2fdca932462ea3c88/raw/57a25319c7360fd953fde3e8aa15daefe24dd51c/ahm-job4-deliverable.json) | _[AHM: Job #5 deliverable gist URL to confirm]_ |
+| Deliverable content | [gist (ahm-job4-deliverable.json)](https://gist.githubusercontent.com/moonshot-cyber/7418ac58eb26eaf2fdca932462ea3c88/raw/57a25319c7360fd953fde3e8aa15daefe24dd51c/ahm-job4-deliverable.json) | [arweave (PoT/RV epistemic block)](https://arweave.net/MeKIu1SUBtjIYD7gCbVvjw1NLmRPIB2nBVedG8f5j_Q) |
 
 Every cell above is verifiable from public data: the TX hashes resolve on Base Sepolia, the deliverable hashes are anchored on-chain via the `JobSubmitted` events, and the Arweave references are permanent. No trust in either evaluator is required to reconstruct what was attested and how it settled.
 
